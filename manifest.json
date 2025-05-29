@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "LTool Enhancer",
+  "version": "1.2",
+  "description": "ltool.gachal.netのURLをリンク化し、YouTube動画やScrapbox記法を適用します。",
+  "content_scripts": [
+    {
+      "matches": ["https://ltool.gachal.net/*"],
+      "js": ["content.js"],
+      "css": ["styles.css"], 
+      "run_at": "document_idle"
+    }
+  ]
+}

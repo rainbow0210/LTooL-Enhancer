@@ -1,0 +1,76 @@
+/* Coding by Gemini 2.5 pro */
+/* styles.css - Scrapbox風スタイル (色を維持・修正版) */
+
+/* 太字レベル */
+.scrapbox-bold-1 { font-weight: bold; }
+.scrapbox-bold-2 { font-weight: bold; } /* ★ color 指定を削除 */
+.scrapbox-bold-3 { font-weight: bold; font-size: 1.1em; } /* ★ color 指定を削除 */
+.scrapbox-bold-4 { font-weight: bold; font-size: 1.2em; text-shadow: 1px 1px #eee; } /* ★ color 指定を削除 */
+
+/* 斜体 */
+.scrapbox-italic { font-style: italic; }
+
+/* 打ち消し線 */
+.scrapbox-strike { text-decoration: line-through; }
+
+/* インラインコード */
+code.scrapbox-code {
+    background-color: #f0f0f0;
+    padding: 0.2em 0.4em;
+    margin: 0 0.1em;
+    border-radius: 3px;
+    font-family: Consolas, 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+    color: inherit; 
+    border: 1px solid #eee;
+}
+
+/* ハッシュタグ */
+a.scrapbox-hashtag {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0.1em 0.5em;
+    margin: 0 0.1em;
+    text-decoration: none;
+    color: inherit;
+    font-size: 0.9em;
+    cursor: default; 
+}
+a.scrapbox-hashtag:hover {
+    background-color: #eee;
+    text-decoration: none;
+}
+
+/* 画像 */
+img.scrapbox-image {
+    max-width: 90%;
+    max-height: 400px;
+    display: block;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    padding: 3px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+/* リンク (外部リンク & Scrapbox内部リンク共通) */
+a.scrapbox-link {
+    color: inherit;
+    text-decoration: underline;
+}
+a.scrapbox-link:hover {
+    text-decoration: none;
+}
+
+/* YouTube埋め込みコンテナ */
+.youtube-embed-container {
+    text-align: center;
+    margin: 1em 0;
+}
+.youtube-embed-container iframe {
+    width: 80vw;
+    max-width: 800px;
+    aspect-ratio: 16 / 9;
+    border: none;
+}
