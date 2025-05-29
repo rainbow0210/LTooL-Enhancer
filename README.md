@@ -1,5 +1,5 @@
 # LTooL-Enhancer
-** Coding by Gemini 2.5 pro **
+*** Coding by Gemini 2.5 pro ***
 
 ## 概要 (Overview)
 
