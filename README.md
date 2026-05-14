@@ -1,5 +1,7 @@
 # LTool Enhancer
 
+Coding by Gemini 2.5 Pro
+
 ## 概要
 
 LTool Enhancer は、プレゼンテーションツール LTool ([https://ltool.gachal.net/](https://ltool.gachal.net/)) の閲覧体験を向上させるための非公式Chrome拡張機能です。
