@@ -1,4 +1,58 @@
 /* Coding by Gemini 2.5 pro */
+
+/**
+ * YouTubeの埋め込み用要素を作成します。
+ * Referrer-Policyに strict-origin-when-cross-origin を明示してYouTubeエラー153を防止します。
+ * @param {string} videoId - YouTube動画ID。
+ * @returns {HTMLDivElement} - 埋め込みコンテナ要素。
+ */
+function createYouTubeEmbed(videoId) {
+    const div = document.createElement('div');
+    div.className = 'youtube-embed-container';
+    div.style.textAlign = 'center';
+    div.style.margin = '1em 0';
+    const iframe = document.createElement('iframe');
+    iframe.style.width = '80vw';
+    iframe.style.maxWidth = '800px';
+    iframe.style.aspectRatio = '16 / 9';
+    iframe.style.border = 'none';
+    iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}`;
+    iframe.title = "YouTube video player";
+    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    iframe.referrerPolicy = "strict-origin-when-cross-origin";
+    iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    iframe.allowFullscreen = true;
+    div.appendChild(iframe);
+    return div;
+}
+
+/**
+ * LTooL本体が生成したYouTube iframeの referrerpolicy="no-referrer" を修正し、
+ * YouTube エラー 153（HTTP Referer欠落エラー）を解決します。
+ * @param {Node} root - 検索対象のルート要素。
+ */
+function fixYouTubeIframes(root = document) {
+    if (!root) return;
+    const iframes = [];
+    if (root.nodeType === Node.ELEMENT_NODE && root.tagName === 'IFRAME') {
+        iframes.push(root);
+    } else if (root.querySelectorAll) {
+        iframes.push(...root.querySelectorAll('iframe[referrerpolicy="no-referrer"]'));
+    }
+
+    for (const iframe of iframes) {
+        const src = iframe.getAttribute('src') || iframe.src || '';
+        if (src.includes('youtube.com') || src.includes('youtube-nocookie.com')) {
+            if (iframe.getAttribute('referrerpolicy') === 'no-referrer') {
+                iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+                iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+                // srcを再代入してReferer付きでリロード
+                iframe.src = iframe.src;
+            }
+        }
+    }
+}
+
 /**
  * Scrapboxの `[...]` の中身を解析して適切なHTML要素を返します。
  * (Scrapbox内部リンクとYouTubeリンクは、processNodeで先に処理される前提)
@@ -15,20 +69,7 @@ function parseScrapboxBracket(content) {
     // 1. YouTubeチェック ([URL] 形式のみ)
     let match = content.match(youtubeRegex);
     if (match) {
-        const videoId = match[2];
-        const div = document.createElement('div');
-        div.className = 'youtube-embed-container';
-        div.style.textAlign = 'center';
-        div.style.margin = '1em 0';
-        const iframe = document.createElement('iframe');
-        iframe.style.width = '80vw'; iframe.style.maxWidth = '800px';
-        iframe.style.aspectRatio = '16 / 9'; iframe.style.border = 'none';
-        iframe.src = `https://www.youtube.com/embed/${videoId}`;
-        iframe.title = "YouTube video player";
-        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-        iframe.allowFullscreen = true;
-        div.appendChild(iframe);
-        return div;
+        return createYouTubeEmbed(match[2]);
     }
     
     // 2. 文字修飾チェック
@@ -181,19 +222,7 @@ function processNode(node) {
           element.className = 'scrapbox-link'; // ★ 通常リンクと同じクラスに変更
           element.appendChild(document.createTextNode(`/${sbProj}/${sbPage}`)); // ★ 表示テキスト変更
       } else if (videoId) { // YouTube
-          const div = document.createElement('div');
-          div.className = 'youtube-embed-container';
-          div.style.textAlign = 'center';
-          div.style.margin = '1em 0';
-          const iframe = document.createElement('iframe');
-          iframe.style.width = '80vw'; iframe.style.maxWidth = '800px';
-          iframe.style.aspectRatio = '16 / 9'; iframe.style.border = 'none';
-          iframe.src = `https://www.youtube.com/embed/${videoId}`;
-          iframe.title = "YouTube video player";
-          iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-          iframe.allowFullscreen = true;
-          div.appendChild(iframe);
-          element = div;
+          element = createYouTubeEmbed(videoId);
       } else if (codeContent) { // Code
           element = document.createElement('code');
           element.className = 'scrapbox-code';
@@ -255,8 +284,13 @@ function observeDOMChanges() {
     for (const mutation of mutationsList) {
       if (mutation.type === 'childList') {
         mutation.addedNodes.forEach(addedNode => {
+            fixYouTubeIframes(addedNode);
             processNode(addedNode);
         });
+      } else if (mutation.type === 'attributes') {
+          if (mutation.target && mutation.target.tagName === 'IFRAME') {
+              fixYouTubeIframes(mutation.target);
+          }
       } else if (mutation.type === 'characterData') {
           processNode(mutation.target);
       }
@@ -266,17 +300,30 @@ function observeDOMChanges() {
   observer.observe(document.body, { 
       childList: true, 
       subtree: true,
-      characterData: true
+      characterData: true,
+      attributes: true,
+      attributeFilter: ['referrerpolicy']
   });
 }
 
+/**
+ * 初期化処理
+ */
+function init() {
+    console.log("LTool Enhancer (v1.3): Fixing existing YouTube iframes...");
+    fixYouTubeIframes(document);
+    console.log("LTool Enhancer (v1.3): Processing initial content...");
+    processNode(document.body);
+    console.log("LTool Enhancer (v1.3): Starting DOM observer...");
+    observeDOMChanges();
+    console.log("LTool Enhancer (v1.3): Ready.");
+}
+
 // ページ読み込み完了時の処理
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        console.log("LTool Enhancer (v1.3): Processing initial content...");
-        processNode(document.body);
-        console.log("LTool Enhancer (v1.3): Starting DOM observer...");
-        observeDOMChanges();
-        console.log("LTool Enhancer (v1.3): Ready.");
-    }, 500);
-});
+if (document.readyState === 'complete') {
+    setTimeout(init, 300);
+} else {
+    window.addEventListener('load', () => {
+        setTimeout(init, 300);
+    });
+}
