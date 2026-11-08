@@ -1,6 +1,6 @@
 # LTool Enhancer
 
-Coding by Gemini 2.5 Pro
+Coding by Gemini 2.5 Pro and Gemini 3.8 Flash
 
 ## 概要
 
