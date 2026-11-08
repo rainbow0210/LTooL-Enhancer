@@ -273,10 +273,10 @@ function observeDOMChanges() {
 // ページ読み込み完了時の処理
 window.addEventListener('load', () => {
     setTimeout(() => {
-        console.log("LTool Enhancer (v1.2): Processing initial content...");
+        console.log("LTool Enhancer (v1.3): Processing initial content...");
         processNode(document.body);
-        console.log("LTool Enhancer (v1.2): Starting DOM observer...");
+        console.log("LTool Enhancer (v1.3): Starting DOM observer...");
         observeDOMChanges();
-        console.log("LTool Enhancer (v1.2): Ready.");
+        console.log("LTool Enhancer (v1.3): Ready.");
     }, 500);
 });

@@ -4,7 +4,7 @@ Coding by Gemini 2.5 Pro
 
 ## 概要
 
-LTool Enhancer は、プレゼンテーションツール LTool ([https://ltool.gachal.net/](https://ltool.gachal.net/)) の閲覧体験を向上させるための非公式Chrome拡張機能です。
+LTool Enhancer は、プレゼンテーションツール LTool ([https://slides.ltool.io/](https://slides.ltool.io/)) の閲覧体験を向上させるための非公式Chrome拡張機能です。
 LTool上のテキストを自動的に解析し、URLのリンク化、YouTube動画の埋め込み、Scrapbox風のテキスト装飾を適用します。
 
 ## 使用技術
@@ -37,7 +37,7 @@ cd LTooL-Enhancer
 
 ### 基本的な使い方
 
-拡張機能をインストールし有効化されていれば、`https://ltool.gachal.net/` にアクセスするだけで自動的に機能が適用されます。LToolのテキストエリアや表示エリアに以下のScrapbox記法を使って書き込むと、リアルタイム（またはページの読み込み/更新時）にテキストが装飾されます。
+拡張機能をインストールし有効化されていれば、`https://slides.ltool.io/` にアクセスするだけで自動的に機能が適用されます。LToolのテキストエリアや表示エリアに以下のScrapbox記法を使って書き込むと、リアルタイム（またはページの読み込み/更新時）にテキストが装飾されます。
 
 ## 主な機能
 
